@@ -4,6 +4,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver import ChromeOptions
 import time, os, telebot, threading
 from decouple import config
 import pandas as pd
@@ -159,10 +160,16 @@ if __name__ == "__main__":
     # Start bot polling in a separate thread
     bot_thread = threading.Thread(target=start_bot_polling)
     bot_thread.start()
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument("--headless=new")  # Enable headless mode
+    # chrome_options.add_argument("--no-sandbox")  # Bypass OS security model
+    chrome_options.add_argument("--disable-dev-shm-usage=new")  # Overcome limited resource problems
+    chrome_options.add_argument("--disable-gpu=new")  # Disable GPU rendering (optional)
 
     # Start scraping loop
     while True:
-        browser = webdriver.Chrome()
+        chrome_options
+        browser = webdriver.Chrome(options=chrome_options)
         browser.get(url=URL)
         cities = CITIES
         select_cities(cities=cities)
